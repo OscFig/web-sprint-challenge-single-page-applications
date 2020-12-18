@@ -3,12 +3,11 @@ import axios from 'axios';
 import { Route, Link, Switch } from 'react-router-dom';
 import * as yup from 'yup';
 
+import schema from './validation/formSchema'
 import Home from './components/Home';
 import Pizza from './components/Pizza';
 
-
-const App = () => {
-  const initialFormValues = {
+const initialFormValues = {
     name:'',
     special:'',
     size:'',
@@ -26,6 +25,58 @@ const App = () => {
   }
   const initialPizza = [];
 
+const App = () => {
+  
+  const [ pizza, setPizza ] = useState(initialPizza); 
+  const [formValues, setFormValues] = useState(initialFormValues); 
+  const [formErrors, setFormErrors] = useState(initialFormErrors);
+
+  const postNewPizza = (newPizza) => {
+    axios
+    .post('https://reqres.in/api/pizza', newPizza)
+    .then(response => {
+      setPizza([response.data, ...pizza]);
+      setFormValues(initialFormValues)
+    })
+    .catch(error => {
+      alert('POST error')
+    })
+  }
+
+  const inputChange = (name, value) => {
+    yup
+    .reach(schema,name)
+    .validate(value)
+    .then(() => {
+      setFormErrors({
+        ...formErrors,
+        [name]: '',
+      })
+    })
+    .catch((err) => {
+      setFormErrors({
+        ...formErrors,
+        [name]: err.errors[0],
+      })
+    })
+    setFormValues({
+      ...formValues,
+      [name]: value
+    });
+  };
+
+  const formSubmit = () => {
+    const newPizza = {
+      name: formValues.name.trim(),
+      special: formValues.special.trim(),
+      size: formValues.size.trim(),
+      sauce: formValues.sauce.trim(),
+      toppings: ['pepperoni','sausage','pineapple','bacon'].filter(
+        (topping) => formValues[topping]
+      ),
+    };
+    postNewPizza(newPizza);
+  }
   return (
     <div className='app'>
       <div className='header'>
@@ -43,7 +94,12 @@ const App = () => {
       </Route>
 
       <Route path='/Pizza'>
-        <Pizza />
+        <Pizza 
+          values={formValues}
+          change={inputChange}
+          submit={formSubmit}
+          errors={formErrors}
+        />
       </Route>
       </Switch>
     </div>

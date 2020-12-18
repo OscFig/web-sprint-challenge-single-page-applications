@@ -2,7 +2,7 @@
 import React from 'react'
 
 export default function Pizza(props) {
-    const { values, submit, change, disabled, errors } = props;
+    const { values, submit, change, errors } = props;
 
 
     const onSubmit = (event) => {
@@ -12,18 +12,17 @@ export default function Pizza(props) {
     const onChange = (event) => {
         const { name, value, type, checked } = event.target;
         const valueToUse = type === 'checkbox' ? checked : value;
-        onChange(name, valueToUse)
+        change(name, valueToUse)
     }
 
     return (
-
         <form onSubmit={onSubmit}>
 {/*           DROPDOWN          */}
             <label>
                 Choice of Size
                 <select 
-                // onChange={onchange} 
-                // value={values.size} 
+                onChange={onChange} 
+                value={values.size} 
                 name='size'>
                     <option value=''>-Select a size-</option>
                     <option value='small'>Small</option>
@@ -39,8 +38,8 @@ export default function Pizza(props) {
                     type='radio'
                     name='sauce'
                     value='BBQ'
-                    // onChange={onChange}
-                    // checked={values.sauce === 'BBQ'}
+                    onChange={onChange}
+                    checked={values.sauce === 'BBQ'}
                     />
             </label>
 
@@ -50,8 +49,8 @@ export default function Pizza(props) {
                     type='radio'
                     name='sauce'
                     value='Ranch'
-                    // onChange={onChange}
-                    // checked={values.sauce === 'Ranch'}
+                    onChange={onChange}
+                    checked={values.sauce === 'Ranch'}
                     />
             </label>
 
@@ -61,8 +60,8 @@ export default function Pizza(props) {
                 <input
                     type='checkbox'
                     name='pepperoni'
-                    // onChange={onChange}
-                    // checked={values.pepperoni}
+                    onChange={onChange}
+                    checked={values.pepperoni}
                     />
             </label>
 
@@ -71,8 +70,8 @@ export default function Pizza(props) {
                 <input
                     type='checkbox'
                     name='sausage'
-                    // onChange={onChange}
-                    // checked={values.sausage}
+                    onChange={onChange}
+                    checked={values.sausage}
                     />
             </label>
 
@@ -81,8 +80,8 @@ export default function Pizza(props) {
                 <input
                     type='checkbox'
                     name='pineapple'
-                    // onChange={onChange}
-                    // checked={values.pineapple}
+                    onChange={onChange}
+                    checked={values.pineapple}
                     />
             </label>
 
@@ -91,8 +90,8 @@ export default function Pizza(props) {
                 <input
                     type='checkbox'
                     name='bacon'
-                    // onChange={onChange}
-                    // checked={values.bacon}
+                    onChange={onChange}
+                    checked={values.bacon}
                     />
             </label>
 
@@ -100,8 +99,8 @@ export default function Pizza(props) {
             <label>
                 Special Instructions
                 <input
-                    // value={values.special}
-                    // onChange={onChange}
+                    value={values.special}
+                    onChange={onChange}
                     name="name"
                     type="text"
                     />
@@ -110,8 +109,8 @@ export default function Pizza(props) {
             <label>
                 Name
                 <input
-                    // value={values.name}
-                    // onChange={onChange}
+                    value={values.name}
+                    onChange={onChange}
                     name="name"
                     type="text"
                     />
@@ -120,6 +119,8 @@ export default function Pizza(props) {
             <div className='PizzaDiv'>
            <button>Create Order</button>
             </div> 
+
+            <div className='errorsDiv'>{errors.name}</div>
         </form>
 
 
