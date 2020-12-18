@@ -2,7 +2,7 @@
 import React from 'react'
 
 export default function Pizza(props) {
-    const { values, submit, change, errors } = props;
+    const { values, submit, change, errors, disabled } = props;
 
 
     const onSubmit = (event) => {
@@ -117,7 +117,7 @@ export default function Pizza(props) {
                 </label>
 
             <div className='PizzaDiv'>
-           <button>Create Order</button>
+           <button disabled={disabled}>Create Order</button>
             </div> 
 
             <div className='errorsDiv'>{errors.name}</div>

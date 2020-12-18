@@ -24,12 +24,14 @@ const initialFormValues = {
     sauce:'',
   }
   const initialPizza = [];
+  const initialDisabled = true;
 
 const App = () => {
   
   const [ pizza, setPizza ] = useState(initialPizza); 
   const [formValues, setFormValues] = useState(initialFormValues); 
   const [formErrors, setFormErrors] = useState(initialFormErrors);
+  const [disabled, setDisabled] = useState(initialDisabled);
 
   const postNewPizza = (newPizza) => {
     axios
@@ -77,28 +79,38 @@ const App = () => {
     };
     postNewPizza(newPizza);
   }
+
+  useEffect(() => {
+    schema.isValid(formValues).then((valid) => {
+      setDisabled(!valid);
+    });
+  }, [formValues]);
+
   return (
     <div className='app'>
       <div className='header'>
-      <h1>Lambda Eats</h1>
-      <p>Create your own Pizza!</p>
-
-      <Link to='/'>Home</Link>
-      <Link to='/Pizza'>Pizza</Link>
+        <div className='logo'>
+          <h1>Lambda Eats</h1>
+          <p>Create your own Pizza!</p>
+        </div>
+      
+        <div className='links'>
+          <Link to='/'>Home</Link>
+          <Link to='/Pizza'>Pizza</Link>
+        </div>
       </div>
 
       <Switch>
-
       <Route exact path='/'>
         <Home />
       </Route>
-
       <Route path='/Pizza'>
         <Pizza 
           values={formValues}
           change={inputChange}
           submit={formSubmit}
           errors={formErrors}
+          disabled={disabled}
         />
       </Route>
       </Switch>
